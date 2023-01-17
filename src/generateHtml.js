@@ -22,7 +22,7 @@ module.exports = function generateHtml(data) {
        <div class="d-flex justify-content-center mt-5">
                     <h1>Meet the Team</h1>
             </div>
-            <div class="row">
+            <div class="row" style="max-width: 1000px; margin: 0 auto;>
     `;
     for (const key in data) {
         if (data[key].role === 'Manager') {
