@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 
+const generateHtml = require('./generateHtml')
 const Manager = require('../lib/manager');
 const Engineer = require('../lib/engineer');
 const Intern = require('../lib/intern');
@@ -14,7 +15,14 @@ function continuationPrompt() {
                 inquirer.prompt(engineerQuestions()).then((engineerAnswers) => {
                     const { engineer_name, engineer_id, engineer_email, engineer_github } = engineerAnswers;
                     const newEngineer = new Engineer(engineer_name, engineer_id, engineer_email, engineer_github);
-                    team.push(newEngineer);
+                    const formattedEngineer = {
+                        role: newEngineer.getRole(),
+                        name: newEngineer.name,
+                        id: newEngineer.id,
+                        github: newEngineer.githubUsername,
+                        email: newEngineer.email,
+                    } 
+                    team.push(formattedEngineer);
                     continuationPrompt();
                 })
             }
@@ -22,26 +30,40 @@ function continuationPrompt() {
                 inquirer.prompt(internQuestions()).then((internAnswers) => {
                     const { intern_name, intern_id, intern_email, intern_school } = internAnswers;
                     const newIntern = new Intern(intern_name, intern_id, intern_email, intern_school);
-                    team.push(newIntern);
+                    const formattedIntern = {
+                        role: newIntern.getRole(),
+                        name: newIntern.name,
+                        id: newIntern.id,
+                        school: newIntern.schoolName,
+                        email: newIntern.email,
+                    } 
+                    team.push(formattedIntern);
                     continuationPrompt();
                 })
             } else {
-                console.log('finished building team');
+                generateHtml(team);
             }
         }
     })
 }
 
 
-module.exports = async function buildTeam() {
+module.exports = function buildTeam() {
     console.log("Let's build your team's roster web page! Start by entering in the manager's information.")
-    inquirer.prompt(managerQuestions()).then((answers) => {
+    inquirer.prompt(managerQuestions())
+        .then((answers) => {
         const { manager_name, manager_id, manager_email, manager_office_number } = answers;
         const newManager = new Manager(manager_name, manager_id, manager_email, manager_office_number);
-        team.push(newManager);
+        const formattedManager = {
+            role: newManager.getRole(),
+            name: newManager.name,
+            id: newManager.id,
+            officeNumber: newManager.officeNumber,
+            email: newManager.email,
+        }    
+        team.push(formattedManager);
+    }).then(() => {
         continuationPrompt();
     })
 }
-
-// console.log(team)
 

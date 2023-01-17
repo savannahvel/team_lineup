@@ -5,7 +5,7 @@ const buildTeam = require('./src/buildTeam');
 
 // Function to initialize app
 function init() {
-    console.log(buildTeam());
+    buildTeam();
 }
 
 // initialize app
